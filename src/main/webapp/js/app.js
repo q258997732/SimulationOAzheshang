@@ -135,7 +135,7 @@ class WorkOrderList {
                 </select>
                 <input type="text" id="filter-keyword" placeholder="搜索工单..." onkeyup="if(event.keyCode===13) workOrderList.loadWorkOrders()">
                 <button class="btn btn-primary btn-sm" onclick="workOrderList.loadWorkOrders()">搜索</button>
-                <a href="create.html" class="btn btn-success btn-sm">新建工单</a>
+                <button class="btn btn-success btn-sm" onclick="window.location.href='create.html'">新建工单</button>
                 <button class="btn btn-danger btn-sm" onclick="workOrderList.clearAll()">清理所有工单</button>
             </div>
         `;
