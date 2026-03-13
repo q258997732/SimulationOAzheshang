@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>OA工单管理系统 - 工单详情</title>
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+    <header>
+        <div class="header-content">
+            <div class="logo">OA工单管理系统</div>
+            <nav>
+                <a href="index.html">工单列表</a>
+                <a href="create.html">新建工单</a>
+            </nav>
+        </div>
+    </header>
+
+    <div class="container">
+        <div class="card">
+            <div class="card-header">
+                工单详情
+                <div style="float: right;">
+                    <button id="back-btn" class="btn btn-secondary btn-sm">返回列表</button>
+                </div>
+            </div>
+
+            <div class="detail-info">
+                <div class="detail-item">
+                    <span class="label">工单编号：</span>
+                    <span class="value" id="detail-order-no">-</span>
+                </div>
+                <div class="detail-item">
+                    <span class="label">状态：</span>
+                    <span class="value" id="detail-status">-</span>
+                </div>
+                <div class="detail-item">
+                    <span class="label">工单标题：</span>
+                    <span class="value" id="detail-title">-</span>
+                </div>
+                <div class="detail-item">
+                    <span class="label">优先级：</span>
+                    <span class="value" id="detail-priority">-</span>
+                </div>
+                <div class="detail-item">
+                    <span class="label">工单分类：</span>
+                    <span class="value" id="detail-category">-</span>
+                </div>
+                <div class="detail-item">
+                    <span class="label">创建时间：</span>
+                    <span class="value" id="detail-create-time">-</span>
+                </div>
+                <div class="detail-item">
+                    <span class="label">创建人：</span>
+                    <span class="value" id="detail-creator">-</span>
+                </div>
+                <div class="detail-item">
+                    <span class="label">创建人部门：</span>
+                    <span class="value" id="detail-creator-dept">-</span>
+                </div>
+                <div class="detail-item">
+                    <span class="label">处理人：</span>
+                    <span class="value" id="detail-handler">-</span>
+                </div>
+                <div class="detail-item">
+                    <span class="label">处理人部门：</span>
+                    <span class="value" id="detail-handler-dept">-</span>
+                </div>
+                <div class="detail-item">
+                    <span class="label">更新时间：</span>
+                    <span class="value" id="detail-update-time">-</span>
+                </div>
+            </div>
+
+            <div id="wechat-content-container"></div>
+
+            <div class="detail-content">
+                <h4>工单描述</h4>
+                <p id="detail-description">无描述</p>
+            </div>
+
+            <div class="detail-content" id="detail-remark-container" style="display: none;">
+                <h4>备注</h4>
+                <p id="detail-remark"></p>
+            </div>
+
+            <div class="card-header" style="margin-top: 30px;">操作记录</div>
+            <div class="log-list" id="log-list">
+                <div class="loading">加载中...</div>
+            </div>
+
+            <div class="form-group" style="text-align: center; margin-top: 30px;">
+                <div id="action-buttons"></div>
+            </div>
+        </div>
+    </div>
+
+    <script src="js/app.js"></script>
+</body>
+</html>

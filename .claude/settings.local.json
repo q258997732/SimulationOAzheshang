@@ -1,0 +1,8 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(ls -la *.sh *.bat 2>/dev/null | wc -l)",
+      "Bash(ls -la *.sh *.bat 2>/dev/null)"
+    ]
+  }
+}

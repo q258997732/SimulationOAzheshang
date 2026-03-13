@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>OA工单管理系统 - 工单列表</title>
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+    <header>
+        <div class="header-content">
+            <div class="logo">OA工单管理系统</div>
+            <nav>
+                <a href="index.html" class="active">工单列表</a>
+                <a href="create.html">新建工单</a>
+            </nav>
+        </div>
+    </header>
+
+    <div class="container">
+        <div class="card">
+            <div class="card-header">工单列表</div>
+            <div id="filter-container"></div>
+
+            <div class="table-container">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>工单编号</th>
+                            <th>工单标题</th>
+                            <th>分类</th>
+                            <th>优先级</th>
+                            <th>状态</th>
+                            <th>创建人</th>
+                            <th>处理人</th>
+                            <th>创建时间</th>
+                            <th>操作</th>
+                        </tr>
+                    </thead>
+                    <tbody id="workorder-list">
+                        <tr><td colspan="10" class="loading">加载中...</td></tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <script src="js/app.js"></script>
+</body>
+</html>

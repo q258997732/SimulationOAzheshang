@@ -1,0 +1,42 @@
+version: '3.8'
+
+services:
+  mysql:
+    image: mysql:8.0
+    container_name: oa-mysql
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: 123456
+      MYSQL_DATABASE: scrm_zhongxin
+      MYSQL_USER: oauser
+      MYSQL_PASSWORD: oapass
+    ports:
+      - "3306:3306"
+    volumes:
+      - mysql_data:/var/lib/mysql
+      - ./src/main/resources/init.sql:/docker-entrypoint-initdb.d/init.sql
+    command: --default-authentication-plugin=mysql_native_password
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-u", "root", "-p'123456'"]
+      interval: 10s
+      timeout: 5s
+      retries: 3
+
+  web:
+    image: tomcat:9.0-jdk8
+    container_name: oa-web
+    restart: always
+    depends_on:
+      mysql:
+        condition: service_healthy
+    ports:
+      - "8080:8080"
+    volumes:
+      - ./target/simulation-oa.war:/usr/local/tomcat/webapps/ROOT.war
+    environment:
+      - DB_URL=jdbc:mysql://mysql:3306/scrm_zhongxin?useSSL=false&serverTimezone=Asia/Shanghai&allowPublicKeyRetrieval=true
+      - DB_USERNAME=oauser
+      - DB_PASSWORD=oapass
+
+volumes:
+  mysql_data:

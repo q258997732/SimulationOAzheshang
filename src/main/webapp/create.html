@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>OA工单管理系统 - 新建工单</title>
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+    <header>
+        <div class="header-content">
+            <div class="logo">OA工单管理系统</div>
+            <nav>
+                <a href="index.html">工单列表</a>
+                <a href="create.html" class="active">新建工单</a>
+            </nav>
+        </div>
+    </header>
+
+    <div class="container">
+        <div class="card">
+            <div class="card-header">企微聊天内容转工单 - 工单发起</div>
+            <form id="workorder-form">
+                <div class="form-group">
+                    <label for="title">工单标题 <span style="color: red;">*</span></label>
+                    <input type="text" id="title" placeholder="请输入工单标题" required>
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="category">工单分类</label>
+                        <input type="text" id="category" placeholder="如：IT支持、行政服务等">
+                    </div>
+                    <div class="form-group">
+                        <label for="priority">优先级</label>
+                        <select id="priority">
+                            <option value="MEDIUM">中</option>
+                            <option value="HIGH">高</option>
+                            <option value="LOW">低</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="creator">创建人 <span style="color: red;">*</span></label>
+                        <input type="text" id="creator" placeholder="请输入创建人姓名" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="creator-dept">创建人部门</label>
+                        <input type="text" id="creator-dept" placeholder="请输入部门名称">
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="wechat-content">企微聊天原始内容</label>
+                    <textarea id="wechat-content" placeholder="请粘贴企微聊天内容（RPA将自动识别并解析）..."></textarea>
+                </div>
+
+                <div class="form-group">
+                    <label for="description">工单描述 <span style="color: red;">*</span></label>
+                    <textarea id="description" placeholder="请详细描述工单内容，包括问题、需求等" required></textarea>
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="handler">期望处理人</label>
+                        <input type="text" id="handler" placeholder="请输入期望处理人姓名">
+                    </div>
+                    <div class="form-group">
+                        <label for="handler-dept">处理人部门</label>
+                        <input type="text" id="handler-dept" placeholder="请输入部门名称">
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="remark">备注</label>
+                    <textarea id="remark" placeholder="其他需要说明的事项..."></textarea>
+                </div>
+
+                <div class="form-group" style="text-align: center;">
+                    <button type="button" id="submit-btn" class="btn btn-primary">提交工单</button>
+                    <button type="button" id="cancel-btn" class="btn btn-secondary">取消</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <script src="js/app.js"></script>
+</body>
+</html>
