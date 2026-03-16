@@ -179,18 +179,295 @@ nav a:hover, nav a.active {
 /* 表格样式 */
 .table-container {
     overflow-x: auto;
+    width: 100%;
 }
 
 table {
     width: 100%;
-    border-collapse: collapse;
+    min-width: 1100px;
+    border-collapse: separate;
+    border-spacing: 0;
+    table-layout: fixed;
 }
 
 table th,
 table td {
-    padding: 12px;
+    padding: 10px 8px;
     text-align: left;
     border-bottom: 1px solid #f0f0f0;
+    vertical-align: middle;
+    box-sizing: border-box;
+}
+
+/* 表格列宽度控制 - 所有列固定宽度 */
+table th:nth-child(1),
+table td:nth-child(1) { width: 130px; }  /* 工单编号 */
+
+table th:nth-child(2),
+table td:nth-child(2) { width: 280px; }  /* 工单标题 */
+
+table th:nth-child(3),
+table td:nth-child(3) { width: 90px; }   /* 分类 */
+
+table th:nth-child(4),
+table td:nth-child(4) { width: 70px; text-align: center; }   /* 优先级 */
+
+table th:nth-child(5),
+table td:nth-child(5) { width: 70px; text-align: center; }   /* 状态 */
+
+table th:nth-child(6),
+table td:nth-child(6) { width: 90px; }   /* 创建人 */
+
+table th:nth-child(7),
+table td:nth-child(7) { width: 90px; }   /* 处理人 */
+
+table th:nth-child(8),
+table td:nth-child(8) { width: 150px; }  /* 创建时间 */
+
+table th:nth-child(9),
+table td:nth-child(9) { width: 130px; }  /* 操作 */
+
+/* 单元格内容溢出处理 - 固定宽度+省略号+悬浮提示 */
+table td {
+    position: relative;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+/* 可悬停单元格的特殊样式 */
+table td.truncate {
+    position: relative;
+    cursor: pointer;
+}
+
+/* 悬浮提示框 - 使用纯CSS实现 */
+table td.truncate:hover::after {
+    content: attr(data-fulltext);
+    position: absolute;
+    left: 50%;
+    bottom: 100%;
+    transform: translateX(-50%);
+    padding: 8px 12px;
+    background-color: rgba(0, 0, 0, 0.85);
+    color: #fff;
+    font-size: 12px;
+    white-space: pre-wrap;
+    word-break: break-all;
+    border-radius: 4px;
+    z-index: 1000;
+    max-width: 300px;
+    max-height: 200px;
+    overflow-y: auto;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.15);
+    pointer-events: none;
+    margin-bottom: 5px;
+}
+
+/* 悬浮提示框箭头 */
+table td.truncate:hover::before {
+    content: '';
+    position: absolute;
+    left: 50%;
+    bottom: 100%;
+    transform: translateX(-50%);
+    border: 5px solid transparent;
+    border-top-color: rgba(0, 0, 0, 0.85);
+    z-index: 1001;
+    pointer-events: none;
+    margin-bottom: -5px;
+}
+
+table td > * {
+    max-width: 100%;
+    box-sizing: border-box;
+}
+
+/* ========== 简约工单列表样式 ========== */
+.workorder-list {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+/* 工单卡片 */
+.workorder-card {
+    background: #fff;
+    border-radius: 8px;
+    padding: 16px 20px;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.08);
+    transition: all 0.2s ease;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+}
+
+.workorder-card:hover {
+    box-shadow: 0 4px 12px rgba(0,0,0,0.12);
+    transform: translateY(-1px);
+}
+
+/* 卡片主内容区 */
+.workorder-card .card-main {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    flex: 1;
+    min-width: 0;
+}
+
+/* 状态指示器 */
+.workorder-card .status-indicator {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    min-width: 90px;
+    flex-shrink: 0;
+}
+
+.workorder-card .status-dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    flex-shrink: 0;
+}
+
+.workorder-card .status-text {
+    font-size: 13px;
+    color: #666;
+}
+
+/* 优先级指示 */
+.workorder-card .priority-badge {
+    font-size: 11px;
+    padding: 2px 8px;
+    border-radius: 10px;
+    font-weight: 500;
+    flex-shrink: 0;
+}
+
+.workorder-card .priority-high {
+    background-color: #fff1f0;
+    color: #ff4d4f;
+}
+
+.workorder-card .priority-medium {
+    background-color: #fff7e6;
+    color: #fa8c16;
+}
+
+.workorder-card .priority-low {
+    background-color: #f6ffed;
+    color: #52c41a;
+}
+
+/* 工单编号 */
+.workorder-card .order-no {
+    font-family: 'SF Mono', Monaco, monospace;
+    font-size: 13px;
+    color: #999;
+    min-width: 130px;
+    flex-shrink: 0;
+}
+
+/* 工单标题 */
+.workorder-card .order-title {
+    font-size: 14px;
+    color: #333;
+    font-weight: 500;
+    flex: 1;
+    min-width: 0;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+/* 卡片元信息区 */
+.workorder-card .card-meta {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+    color: #999;
+    font-size: 13px;
+    flex-shrink: 0;
+}
+
+.workorder-card .meta-item {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+
+.workorder-card .meta-item .avatar {
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: #fff;
+    font-size: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 500;
+}
+
+/* 操作按钮 */
+.workorder-card .card-actions {
+    flex-shrink: 0;
+    opacity: 0.6;
+    transition: opacity 0.2s;
+}
+
+.workorder-card:hover .card-actions {
+    opacity: 1;
+}
+
+/* 状态颜色 */
+.workorder-card .status-pending,
+.workorder-card .status-dot.status-pending { background-color: #fa8c16; }
+.workorder-card .status-processing,
+.workorder-card .status-dot.status-processing { background-color: #1890ff; }
+.workorder-card .status-completed,
+.workorder-card .status-dot.status-completed { background-color: #52c41a; }
+.workorder-card .status-closed,
+.workorder-card .status-dot.status-closed { background-color: #999; }
+
+/* 空状态 */
+.workorder-list .empty-state {
+    text-align: center;
+    padding: 60px 20px;
+    color: #999;
+}
+
+.workorder-list .empty-state .empty-icon {
+    font-size: 48px;
+    margin-bottom: 16px;
+    opacity: 0.5;
+}
+
+.workorder-list .empty-state .empty-text {
+    font-size: 14px;
+    margin-bottom: 20px;
+}
+
+/* 加载更多 */
+.workorder-list .load-more {
+    text-align: center;
+    padding: 20px;
+}
+
+.workorder-list .load-more button {
+    color: #667eea;
+    background: none;
+    border: none;
+    cursor: pointer;
+    font-size: 14px;
+}
+
+.workorder-list .load-more button:hover {
+    text-decoration: underline;
 }
 
 table th {
@@ -205,11 +482,28 @@ table tbody tr:hover {
 
 /* 状态标签 */
 .status-tag {
-    display: inline-block;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
     padding: 4px 8px;
     border-radius: 4px;
     font-size: 12px;
     font-weight: 500;
+    white-space: nowrap;
+    line-height: 1.2;
+    max-width: 100%;
+}
+
+/* 表格单元格内文本处理 */
+table td {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+table td a,
+table td button {
+    white-space: nowrap;
 }
 
 .status-pending {
@@ -313,6 +607,15 @@ table tbody tr:hover {
 .wechat-content h4 {
     margin-bottom: 10px;
     color: #fa8c16;
+}
+
+.wechat-content pre {
+    white-space: pre-wrap;
+    word-wrap: break-word;
+    line-height: 1.8;
+    color: #333;
+    font-family: inherit;
+    margin: 0;
 }
 
 /* 操作日志 */

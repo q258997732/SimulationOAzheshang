@@ -70,6 +70,35 @@ const Utils = {
         return date.toLocaleString('zh-CN');
     },
 
+    // 格式化相对时间
+    formatRelativeTime(dateStr) {
+        if (!dateStr) return '-';
+        const date = new Date(dateStr);
+        const now = new Date();
+        const diff = now - date;
+        const oneDay = 24 * 60 * 60 * 1000;
+
+        // 今天
+        if (date.toDateString() === now.toDateString()) {
+            return date.toLocaleTimeString('zh-CN', { hour: '2-digit', minute: '2-digit' });
+        }
+
+        // 昨天
+        const yesterday = new Date(now - oneDay);
+        if (date.toDateString() === yesterday.toDateString()) {
+            return '昨天';
+        }
+
+        // 7天内
+        if (diff < 7 * oneDay) {
+            const days = ['周日', '周一', '周二', '周三', '周四', '周五', '周六'];
+            return days[date.getDay()];
+        }
+
+        // 更早前
+        return `${(date.getMonth() + 1).toString().padStart(2, '0')}-${date.getDate().toString().padStart(2, '0')}`;
+    },
+
     // 获取状态文本和样式
     getStatusInfo(status) {
         const statusMap = {
@@ -89,6 +118,14 @@ const Utils = {
             'LOW': { text: '低', class: 'priority-low' }
         };
         return priorityMap[priority] || { text: priority, class: '' };
+    },
+
+    // HTML转义，防止XSS攻击
+    escapeHtml(text) {
+        if (!text || typeof text !== 'string') return text;
+        const div = document.createElement('div');
+        div.textContent = text;
+        return div.innerHTML;
     },
 
     // 获取操作类型文本
@@ -162,29 +199,47 @@ class WorkOrderList {
     }
 
     renderTable(workOrders) {
-        const tbody = document.getElementById('workorder-list');
+        const container = document.getElementById('workorder-list');
         if (!workOrders || workOrders.length === 0) {
-            tbody.innerHTML = '<tr><td colspan="10" class="loading">暂无数据</td></tr>';
+            container.innerHTML = `
+                <div class="empty-state">
+                    <div class="empty-icon">📋</div>
+                    <div class="empty-text">暂无工单</div>
+                    <button class="btn btn-primary" onclick="window.location.href='create.html'">新建工单</button>
+                </div>
+            `;
             return;
         }
 
-        tbody.innerHTML = workOrders.map(order => {
+        container.innerHTML = workOrders.map(order => {
             const statusInfo = Utils.getStatusInfo(order.status);
             const priorityInfo = Utils.getPriorityInfo(order.priority);
+            const creator = order.creatorName || order.creatorId || order.creator || '-';
+            const creatorInitial = creator.charAt(0).toUpperCase();
+            const timeText = Utils.formatRelativeTime(order.createTime);
+
             return `
-                <tr>
-                    <td>${order.orderNo}</td>
-                    <td>${order.title}</td>
-                    <td>${order.category || '-'}</td>
-                    <td><span class="status-tag ${priorityInfo.class}">${priorityInfo.text}</span></td>
-                    <td><span class="status-tag ${statusInfo.class}">${statusInfo.text}</span></td>
-                    <td>${order.creator || '-'}</td>
-                    <td>${order.handler || '-'}</td>
-                    <td>${Utils.formatDate(order.createTime)}</td>
-                    <td>
-                        <button class="btn btn-primary btn-sm" onclick="workOrderList.viewDetail(${order.id})">详情</button>
-                    </td>
-                </tr>
+                <div class="workorder-card" onclick="workOrderList.viewDetail(${order.id})">
+                    <div class="card-main">
+                        <div class="status-indicator">
+                            <span class="status-dot ${statusInfo.class}"></span>
+                            <span class="status-text">${statusInfo.text}</span>
+                        </div>
+                        <span class="priority-badge ${priorityInfo.class}">${priorityInfo.text}</span>
+                        <span class="order-no">${order.orderNo}</span>
+                        <span class="order-title" title="${Utils.escapeHtml(order.title || '-')}">${order.title || '-'}</span>
+                    </div>
+                    <div class="card-meta">
+                        <div class="meta-item">
+                            <span class="avatar">${creatorInitial}</span>
+                            <span>${creator}</span>
+                        </div>
+                        <div class="meta-item">${timeText}</div>
+                    </div>
+                    <div class="card-actions">
+                        <button class="btn btn-primary btn-sm" onclick="event.stopPropagation(); workOrderList.viewDetail(${order.id})">详情</button>
+                    </div>
+                </div>
             `;
         }).join('');
     }
@@ -320,7 +375,9 @@ class WorkOrderDetail {
         document.getElementById('detail-status').innerHTML = `<span class="status-tag ${statusInfo.class}">${statusInfo.text}</span>`;
         document.getElementById('detail-priority').innerHTML = `<span class="status-tag ${priorityInfo.class}">${priorityInfo.text}</span>`;
         document.getElementById('detail-category').textContent = data.category || '-';
-        document.getElementById('detail-creator').textContent = data.creator || '-';
+        // 创建人优先显示 creatorName，其次 creatorId，最后 creator
+        const creatorDisplay = data.creatorName || data.creatorId || data.creator || '-';
+        document.getElementById('detail-creator').textContent = creatorDisplay;
         document.getElementById('detail-creator-dept').textContent = data.creatorDept || '-';
         document.getElementById('detail-handler').textContent = data.handler || '-';
         document.getElementById('detail-handler-dept').textContent = data.handlerDept || '-';
@@ -333,7 +390,7 @@ class WorkOrderDetail {
             document.getElementById('wechat-content-container').innerHTML = `
                 <div class="wechat-content">
                     <h4>企微聊天原始内容</h4>
-                    <p>${data.wechatContent}</p>
+                    <pre>${data.wechatContent}</pre>
                 </div>
             `;
         }
